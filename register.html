@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodie - Register</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .register-container {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .role-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .role-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .role-option:hover {
+      border-color: #ff8c42;
+    }
+    .role-option.selected {
+      border-color: #ff8c42;
+      background-color: #fff4ed;
+    }
+    .role-option input {
+      display: none;
+    }
+    .role-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #ff8c42;
+      color: #ff8c42;
+    }
+    .btn-outline:hover {
+      background: #ff8c42;
+      color: white;
+    }
+    .btn-primary {
+      background: #ff8c42;
+      border: 2px solid #ff8c42;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #e67339;
+      border-color: #e67339;
+    }
+  </style>
+</head>
+<body class="register-page">
+  <div class="register-container">
+    <h1 class="text-center">Join Foodie</h1>
+    <p class="text-center">Create your account to get started</p>
+    
+    <form id="register-form">
+      <div class="form-group">
+        <label for="reg-email">Email Address</label>
+        <input type="email" id="reg-email" placeholder="Enter your email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" placeholder="Create a password" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Select Your Role</label>
+        <div class="role-options">
+          <label class="role-option" onclick="selectRole(this, 'customer')">
+            <div class="role-icon">🍽️</div>
+            <div>Customer</div>
+            <input type="radio" name="role" value="customer" checked>
+          </label>
+          
+          <label class="role-option" onclick="selectRole(this, 'owner')">
+            <div class="role-icon">👨‍🍳</div>
+            <div>Restaurant Owner</div>
+            <input type="radio" name="role" value="owner">
+          </label>
+          
+          <label class="role-option" onclick="selectRole(this, 'admin')">
+            <div class="role-icon">🔒</div>
+            <div>Admin</div>
+            <input type="radio" name="role" value="admin">
+          </label>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <a href="index.html" class="btn btn-outline">Back to Login</a>
+        <button type="submit" class="btn btn-primary">Create Account</button>
+      </div>
+      
+      <p id="register-error" class="text-center mt-20" style="color:red;"></p>
+    </form>
+  </div>
+
+  <script>
+    // Role selection
+    function selectRole(element, role) {
+      document.querySelectorAll('.role-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      element.classList.add('selected');
+      document.querySelector(`input[value="${role}"]`).checked = true;
+    }
+
+    // Form submission
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value.trim();
+      const role = document.querySelector('input[name="role"]:checked').value;
+      
+      // Validate inputs
+      if (!email || !password) {
+        document.getElementById('register-error').textContent = 'Please fill in all fields';
+        return;
+      }
+      
+      // Check if user exists
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      if (users.some(user => user.email === email)) {
+        document.getElementById('register-error').textContent = 'Email already registered';
+        return;
+      }
+      
+      // Create new user
+      const newUser = { email, password, role };
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      
+      // Auto-login and redirect
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      window.location.href = `${role}.html`;
+    });
+
+    // Initialize by selecting customer role by default
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.role-option').classList.add('selected');
+    });
+  </script>
+</body>
+</html>
