@@ -51,8 +51,6 @@ function createNavButton() {
     ];
   } else if (user.role === 'admin') {
     menuItems = [
-      { text: 'Pending Approvals', href: 'admin.html#approvals' },
-      { text: 'Approval History', href: 'admin.html#history' },
       { text: 'Logout', action: 'logout' }
     ];
   }
@@ -91,4 +89,5 @@ function logout() {
 }
 
 // Initialize navigation when DOM loads
+
 document.addEventListener('DOMContentLoaded', setupNavigation);
