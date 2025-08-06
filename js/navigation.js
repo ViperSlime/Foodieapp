@@ -41,7 +41,6 @@ function createNavButton() {
   if (user.role === 'customer') {
     menuItems = [
       { text: 'Home', href: 'customer.html' },
-      { text: 'My Orders', href: 'customer.html#orders' },
       { text: 'Logout', action: 'logout' }
     ];
   } else if (user.role === 'owner') {
@@ -91,3 +90,4 @@ function logout() {
 // Initialize navigation when DOM loads
 
 document.addEventListener('DOMContentLoaded', setupNavigation);
+
